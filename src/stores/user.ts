@@ -1,14 +1,14 @@
 
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import type { User } from '@supabase/supabase-js';
+import type { User } from '../types/user';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
 
   const isAuthenticated = computed(() => !!user.value);
   const userEmail = computed(() => user.value?.email);
-  const username = computed(() => user.value?.user_metadata.username);
+  const username = computed(() => user.value?.username);
 
   const setUser = (newUser: User | null) => {
     user.value = newUser;

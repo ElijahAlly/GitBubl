@@ -3,14 +3,14 @@ import { RouterLink, RouterView } from 'vue-router';
 import { useAuth } from './composables/useAuth';
 import { useTheme } from './composables/useTheme';
 
-const { user, username } = useAuth();
+const { user, username, signOut } = useAuth();
 const { toggleDarkMode, isDarkMode } = useTheme();
 </script>
 
 <template>
-  <header class="sticky flex items-center w-screen h-12 bg-emerald-950 text-white">
+  <header class="sticky flex items-center w-screen h-16 bg-zinc-300 dark:bg-zinc-800 dark:text-white">
     <RouterLink to="/" class="min-w-fit ml-9 text-2xl">
-        Bubl🫧
+      Bubl🫧
     </RouterLink>
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
     <nav class="h-full w-full flex items-center justify-end gap-6 pr-9">
@@ -19,6 +19,8 @@ const { toggleDarkMode, isDarkMode } = useTheme();
         Profile
       </RouterLink>
       <RouterLink v-else to="/signup">Signup</RouterLink>
+      <button v-if="user" @click="signOut"
+        class="text-white bg-red-500 rounded-md hover:bg-red-600 p-2">Logout</button>
       <button @click="toggleDarkMode" :title="isDarkMode ? 'Dark Mode' : 'Light Mode'"
         class="h-fit py-1 px-2 rounded bg-zinc-100 text-lg dark:bg-zinc-950">
         {{ isDarkMode ? '🌚' : '🌞' }}

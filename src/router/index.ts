@@ -9,21 +9,17 @@ const authMiddleware = async (to: RouteLocationNormalizedGeneric, from: RouteLoc
   const session = data.session;
 
   if (!session) {
-    next('/signup'); // redirect if not logged in
+    next('/signup?existing=true'); // redirect if not logged in
 
   } else {
     // Get all users and check if username exists
-    const { data: { users }, error } = await supabase.auth.admin.listUsers();
+    const { data: userExists } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', to.params.username)
+      .single();
 
-    console.log("\n== users ==\n", users, "\n");
-    console.log("\n== to.params.username ==\n", to.params.username, "\n");
-    const userExists = users?.some(user =>
-      user.user_metadata?.username === to.params.username
-    );
-
-    console.log("\n== error ==\n", error, "\n");
-
-    if (error || !userExists) {
+    if (!userExists) {
       next({ name: 'not-found' });
 
     } else {
@@ -46,7 +42,7 @@ const router = createRouter({
       component: () => import('../views/SignupView.vue'),
     },
     {
-      path: '/:username',
+      path: '/u/:username',
       name: 'user-profile',
       component: () => import('../views/UserView.vue'),
       beforeEnter: authMiddleware,

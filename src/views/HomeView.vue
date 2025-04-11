@@ -2,5 +2,5 @@
 </script>
 
 <template>
-  <div>Home page</div>
+  <div class="dark:text-zinc-50">Home page</div>
 </template>
