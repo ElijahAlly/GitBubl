@@ -8,8 +8,10 @@ import { storeToRefs } from 'pinia';
 const supabaseAppId = import.meta.env.VITE_SUPABASE_APP_ID;
 
 export function useAuth() {
+  // const route = useRoute();
   const router = useRouter();
   const userStore = useUserStore();
+  const session = ref<Session | null>(null);
   const { setUser, clearUser } = userStore;
   const { user, username } = storeToRefs(userStore);
   const loading = ref(false);
@@ -30,16 +32,18 @@ export function useAuth() {
       const { data } = await supabase.auth.getSession();
 
       if (data.session) {
+        session.value = data.session;
         await getProfile(data.session);
-        goToProfile();
+        // goToProfile();
       }
 
       // Set up auth state change listener
-      supabase.auth.onAuthStateChange(async (_, session) => {
-        if (session) {
+      supabase.auth.onAuthStateChange(async (_, _session) => {
+        if (_session) {
+          session.value = _session;
           try {
-            await getProfile(session);
-            goToProfile();
+            await getProfile(_session);
+            // goToProfile();
           } catch (err) {
             console.error(err, 'Error getting profile');
           }
@@ -52,18 +56,21 @@ export function useAuth() {
       if (retryCount < MAX_RETRIES) {
         await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         await initializeAuth(retryCount + 1);
+      } else {
+        signOut();
       }
     }
   };
 
-  const goToProfile = () => {
-    if (user.value) {
-      router.push({
-        name: 'user-profile',
-        params: { username: user.value.username }
-      })
-    }
-  }
+  // const goToProfile = () => {
+  //   if (user.value && route.name && route.name !== 'user-profile') {
+  //     console.log("\n== route ==\n", route.name, "\n");
+  //     router.push({
+  //       name: 'user-profile',
+  //       params: { username: user.value.username }
+  //     })
+  //   }
+  // }
 
   const getProfile = async (session: Session) => {
     try {
@@ -170,6 +177,8 @@ export function useAuth() {
   const signOut = async () => {
     try {
       loading.value = true;
+
+      session.value = null;
       clearUser();
       if (window && supabaseAppId) window.localStorage.removeItem('sb-' + supabaseAppId + '-auth-token');
 
@@ -207,6 +216,10 @@ export function useAuth() {
       });
 
       if (error) throw error;
+
+      const { data } = await supabase.auth.getSession();
+
+      if (data.session) await getProfile(data.session);
 
       isVerifying.value = false;
       loading.value = false;
@@ -249,6 +262,7 @@ export function useAuth() {
     isVerifying,
     resendOtpLoading,
     resendOtpError,
+    session,
     initializeAuth,
     handleLogin,
     handleSignUp,

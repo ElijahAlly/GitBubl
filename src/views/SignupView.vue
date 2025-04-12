@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuth } from '../composables/useAuth';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useUserStore } from '../stores/user';
+import { storeToRefs } from 'pinia';
 
 type SigninTabView = 'signup' | 'signin';
 
+const router = useRouter();
 const route = useRoute();
 
 const email = ref('');
 const username = ref('');
 const otpCode = ref('');
+
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 
 const curTab = ref<SigninTabView>(route.query.existing ? 'signin' : 'signup');
 
@@ -36,8 +42,11 @@ const toggleTab = (to: SigninTabView) => {
 const handleSubmit = async () => {
   if (isVerifying.value) {
     const success = await verifyOtp(email.value, otpCode.value);
-    if (success) {
-      // Verification successful - user will be redirected by auth state change
+    if (success && user.value?.username) {
+      router.push({
+        name: 'user-profile',
+        params: { username: user.value.username }
+      })
       return;
     }
   } else {

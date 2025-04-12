@@ -42,7 +42,7 @@ const router = createRouter({
       component: () => import('../views/SignupView.vue'),
     },
     {
-      path: '/u/:username',
+      path: '/:username',
       name: 'user-profile',
       component: () => import('../views/UserView.vue'),
       beforeEnter: authMiddleware,

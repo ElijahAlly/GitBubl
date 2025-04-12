@@ -1,39 +1,56 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/composables/useAuth';
+import { useUserStore } from '../../stores/user';
+import type { User } from '../../types/user';
 
-interface Props {
-  session: any;
-}
+const router = useRouter();
+const userStore = useUserStore();
+const { setUser } = userStore;
+const { user } = storeToRefs(userStore);
 
-const props = withDefaults(defineProps<Props>(), {
-  session: {}
-});
+const updatedSuccessfully = ref(false);
+const loading = ref(false);
 
-const { signOut } = useAuth();
+const updatedUser = ref<Partial<User>>({ ...user.value });
 
-const loading = ref(true);
-const username = ref('');
-const website = ref('');
-const avatar_url = ref('');
-
-async function updateProfile() {
+const updateProfile = async () => {
   try {
     loading.value = true;
-    const { user } = props.session;
+    const { data: sessionData } = await  supabase.auth.getSession();
+
+    const userId = user.value?.id || sessionData?.session?.user.id;
+
+    if (!userId) return;
 
     const updates = {
-      id: user.id,
-      username: username.value,
-      website: website.value,
-      avatar_url: avatar_url.value,
+      username: updatedUser.value.username,
+      website: updatedUser.value.website,
+      avatar_url: updatedUser.value.avatar_url,
       updated_at: new Date(),
     }
 
-    const { error } = await supabase.from('profiles').upsert(updates);
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', userId)
+      .select('*')
+      .single();
 
     if (error) throw error;
+
+    const prevUsername = user.value?.username;
+
+    setUser(data);
+
+    if (prevUsername !== updatedUser.value.username) {
+      router.push({
+        name: 'user-profile',
+        params: { username: updatedUser.value.username }
+      })
+    }
   } catch (error) {
     alert(error);
   } finally {
@@ -43,31 +60,27 @@ async function updateProfile() {
 </script>
 
 <template>
-  <form class="form-widget" @submit.prevent="updateProfile">
-    <div>
-      <label for="email">Email</label>
-      <input id="email" type="text" :value="session.user.email" disabled />
+  <form v-if="user" class="border rounded-md p-3 my-6 mx-12 flex flex-col justify-around items-center"
+    @submit.prevent="updateProfile">
+    <div class="w-full flex flex-col items-start justify-center my-3">
+      <label for="email" class="mr-3">Email</label>
+      <input id="email" type="text" class="border rounded-md p-2 text-lg bg-zinc-50 text-zinc-950"
+        :value="updatedUser.email" disabled />
     </div>
-    <div>
-      <label for="username">Name</label>
-      <input id="username" type="text" v-model="username" />
+    <div class="w-full flex flex-col items-start justify-center my-3">
+      <label for="username" class="mr-3">Name</label>
+      <input id="username" type="text" v-model="updatedUser.username"
+        class="border rounded-md p-2 text-lg bg-zinc-50 text-zinc-950" />
     </div>
-    <div>
-      <label for="website">Website</label>
-      <input id="website" type="url" v-model="website" />
-    </div>
-
-    <div>
-      <input
-        type="submit"
-        class="button primary block"
-        :value="loading ? 'Loading ...' : 'Update'"
-        :disabled="loading"
-      />
+    <div class="w-full flex flex-col items-start justify-center my-3">
+      <label for="website" class="mr-3">Website</label>
+      <input id="website" type="url" v-model="updatedUser.website"
+        class="border rounded-md p-2 text-lg bg-zinc-50 text-zinc-950" />
     </div>
 
-    <div>
-      <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
+    <div class="w-full flex flex-col items-start justify-center my-3">
+      <input type="submit" class="border bg-emerald-500 hover:bg-emerald-600 rounded-md text-zinc-50 py-2 px-6"
+      :value="loading ? 'Loading ...' : 'Update'" :disabled="loading" />
     </div>
   </form>
 </template>
