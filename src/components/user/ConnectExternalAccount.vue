@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import { Icon } from '@iconify/vue';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../composables/useAuth';
-
 type ProviderName = 'GitLab' | 'GitHub' | 'BitBucket';
 
 enum ProviderNameLowercase {
@@ -22,6 +18,8 @@ type ProviderStatus = Record<ProviderName, boolean>;
 
 const { session } = useAuth();
 const isLoading = ref(false);
+
+const { connectGithub } = useGithubConnect();
 
 const hasLinkedProvider = computed<ProviderStatus>(() => {
   const providers = session.value?.user.app_metadata.providers;
@@ -56,9 +54,14 @@ const signInWithProvider = async (providerName: ProviderName) => {
 
   isLoading.value = true;
   try {
-    await supabase.auth.signInWithOAuth({
-      provider: ProviderNameLowercase[providerName]
-    })
+    switch (providerName) {
+      case 'GitHub':
+        connectGithub();
+        break;
+
+      default:
+        break;
+    }
   } catch (error: any) {
     console.error('Sign in error:', error.message)
   } finally {
@@ -76,9 +79,9 @@ const signInWithProvider = async (providerName: ProviderName) => {
           'relative flex w-full items-center justify-center gap-2 rounded-sm p-3 py-2 text-sm font-semibold transition-all duration-200 select-none',
           {'bg-zinc-600/50 pointer-events-none': hasLinkedProvider[provider.name] }
         ]" @click="signInWithProvider(provider.name)" :title="provider.name">
-        <Icon :icon="provider.icon" class="h-5 w-5" :style="{ color: 'inherit' }" />
+        <Icon :name="provider.icon" class="h-5 w-5" :style="{ color: 'inherit' }" />
         <span>{{ provider.name }}</span>
-        <Icon v-if="hasLinkedProvider[provider.name]" icon="mynaui:check" class="h-5 w-5 text-emerald-500" />
+        <Icon v-if="hasLinkedProvider[provider.name]" name="mynaui:check" class="h-5 w-5 text-emerald-500" />
       </button>
     </div>
   </div>

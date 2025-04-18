@@ -1,19 +1,16 @@
-import { ref, onMounted } from 'vue';
-import { supabase } from '../lib/supabase';
-import { useRouter } from 'vue-router';
+import { useSupabase } from '~/lib/supabase';
 import type { Session } from '@supabase/supabase-js';
-import { useUserStore } from '../stores/user';
-import { storeToRefs } from 'pinia';
 
-const supabaseAppId = import.meta.env.VITE_SUPABASE_APP_ID;
+const supabaseAppId = process.env.NUXT_SUPABASE_APP_ID;
 
 export function useAuth() {
-  // const route = useRoute();
-  const router = useRouter();
+  const supabase = useSupabase();
   const userStore = useUserStore();
-  const session = ref<Session | null>(null);
   const { setUser, clearUser } = userStore;
   const { user, username } = storeToRefs(userStore);
+
+  const session = ref<Session | null>(null);
+
   const loading = ref(false);
   const resendOtpLoading = ref(false);
   const otpError = ref<string | null>(null);
@@ -84,10 +81,7 @@ export function useAuth() {
 
       if (!data) {
         console.error('Supabase query error: could not find user.');
-        router.push({
-          name: 'signup',
-          query: { existing: 'true' }
-        });
+        await navigateTo(`/signup?existing=true`);
       }
 
       setUser(data);
@@ -193,10 +187,7 @@ export function useAuth() {
         timeoutPromise
       ]);
 
-      router.push({
-        name: 'signup',
-        query: { existing: 'true' }
-      });
+      await navigateTo(`/signup?existing=true`);
     } catch (error) {
       console.error(error);
     } finally {

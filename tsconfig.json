@@ -1,16 +1,16 @@
 {
   "files": [],
+  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
+      "@/*": ["./src/*"],
+      "~/*": ["./src/*"]
     },
-    {
-      "path": "./tsconfig.app.json"
-    }
-  ]
+    "strict": true,
+    "skipLibCheck": true,
+    "types": [
+      "node",
+      "@pinia/nuxt"
+    ]
+  }
 }

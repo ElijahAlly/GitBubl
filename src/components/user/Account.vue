@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { supabase } from '@/lib/supabase';
-import { useUserStore } from '../../stores/user';
-import type { User } from '../../types/user';
+import { useSupabase } from '~/lib/supabase';
+import type { User } from '~/types/user';
 
-const router = useRouter();
+const supabase = useSupabase();
 const userStore = useUserStore();
 const { setUser } = userStore;
-const { user } = storeToRefs(userStore);
+const { user, updatedSuccessfully } = storeToRefs(userStore);
 
-const updatedSuccessfully = ref(false);
 const loading = ref(false);
 
 const updatedUser = ref<Partial<User>>({ ...user.value });
 
 const updateProfile = async () => {
+  if (loading.value || updatedSuccessfully.value) return;
+
   try {
     loading.value = true;
     const { data: sessionData } = await  supabase.auth.getSession();
@@ -43,13 +40,10 @@ const updateProfile = async () => {
 
     const prevUsername = user.value?.username;
 
-    setUser(data);
+    setUser(data, true);
 
     if (prevUsername !== updatedUser.value.username) {
-      router.push({
-        name: 'user-profile',
-        params: { username: updatedUser.value.username }
-      })
+      await navigateTo(`/${updatedUser.value.username}`);
     }
   } catch (error) {
     alert(error);
@@ -80,7 +74,7 @@ const updateProfile = async () => {
 
     <div class="w-full flex flex-col items-start justify-center my-3">
       <input type="submit" class="border bg-emerald-500 hover:bg-emerald-600 rounded-md text-zinc-50 py-2 px-6"
-      :value="loading ? 'Loading ...' : 'Update'" :disabled="loading" />
+        :value="loading ? 'Loading ...' : updatedSuccessfully ? 'Updated Successfully!' : 'Update'" :disabled="loading" />
     </div>
   </form>
 </template>

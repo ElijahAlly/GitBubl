@@ -1,17 +1,19 @@
-
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import type { User } from '../types/user';
+import type { User } from '~/types/user';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
+  const updatedSuccessfully = ref(false);
 
   const isAuthenticated = computed(() => !!user.value);
-  const userEmail = computed(() => user.value?.email);
-  const username = computed(() => user.value?.username);
+  const userEmail = computed(() => user.value?.email || '');
+  const username = computed(() => user.value?.username || '');
 
-  const setUser = (newUser: User | null) => {
+  const setUser = (newUser: User | null, updated: boolean = false) => {
     user.value = newUser;
+    if (updated) {
+      updatedSuccessfully.value = true;
+      setTimeout(() => updatedSuccessfully.value = false, 1200);
+    }
   }
 
   const clearUser = () => {
@@ -21,6 +23,7 @@ export const useUserStore = defineStore('user', () => {
   return {
     // state
     user,
+    updatedSuccessfully,
 
     // getters
     isAuthenticated,
