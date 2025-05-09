@@ -4,7 +4,6 @@ import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { createClient } from 'file:///Users/elijahmusaally/Desktop/gitbubl/node_modules/.pnpm/@supabase+supabase-js@2.49.4/node_modules/@supabase/supabase-js/dist/main/index.js';
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file:///Users/elijahmusaally/Desktop/gitbubl/node_modules/.pnpm/vue-bundle-renderer@2.1.1/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import destr from 'file:///Users/elijahmusaally/Desktop/gitbubl/node_modules/.pnpm/destr@2.0.5/node_modules/destr/dist/index.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, joinRelativeURL } from 'file:///Users/elijahmusaally/Desktop/gitbubl/node_modules/.pnpm/ufo@1.6.1/node_modules/ufo/dist/index.mjs';
@@ -635,9 +634,6 @@ const _inlineRuntimeConfig = {
       "/__nuxt_error": {
         "cache": false
       },
-      "/confirm": {
-        "ssr": false
-      },
       "/_nuxt/builds/meta/**": {
         "headers": {
           "cache-control": "public, max-age=31536000, immutable"
@@ -656,7 +652,7 @@ const _inlineRuntimeConfig = {
     "supabase": {
       "url": "https://edfutobhwcdbjubjpqvm.supabase.co",
       "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZnV0b2Jod2NkYmp1YmpwcXZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3OTg3MTcsImV4cCI6MjA1OTM3NDcxN30.Ebr_d-K1OXudcKLLT-P9TzZ-jkxMaI6MDzgrKTLb_yE",
-      "redirect": true,
+      "redirect": false,
       "redirectOptions": {
         "login": "/login",
         "callback": "/confirm",
@@ -1239,13 +1235,9 @@ const _b1ZKRr = lazyEventHandler(() => {
   return useBase(opts.baseURL, ipxHandler);
 });
 
-const _lazy_2_VVBp = () => Promise.resolve().then(function () { return callback$1; });
-const _lazy_pSZib2 = () => Promise.resolve().then(function () { return disconnect$1; });
 const _lazy_Mcsl10 = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '/api/auth/github/callback', handler: _lazy_2_VVBp, lazy: true, middleware: false, method: undefined },
-  { route: '/api/auth/github/disconnect', handler: _lazy_pSZib2, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_error', handler: _lazy_Mcsl10, lazy: true, middleware: false, method: undefined },
   { route: '/_ipx/**', handler: _b1ZKRr, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_Mcsl10, lazy: true, middleware: false, method: undefined }
@@ -1482,93 +1474,6 @@ const template$1 = (messages) => {
 const errorDev = /*#__PURE__*/Object.freeze({
   __proto__: null,
   template: template$1
-});
-
-const callback = defineEventHandler(async (event) => {
-  const query = getQuery$1(event);
-  const code = query.code;
-  const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
-    method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      client_id: process.env.NUXT_GITHUB_CLIENT_ID || "",
-      client_secret: process.env.NUXT_GITHUB_CLIENT_SECRET || "",
-      code
-    })
-  });
-  const tokenData = await tokenResponse.json();
-  const accessToken = tokenData.access_token;
-  const userResponse = await fetch("https://api.github.com/user", {
-    headers: {
-      "Authorization": `Bearer ${accessToken}`
-    }
-  });
-  const githubUser = await userResponse.json();
-  const { supabaseClient } = event.context;
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (!session) {
-    throw createError({
-      statusCode: 401,
-      message: "Unauthorized"
-    });
-  }
-  const supabaseServiceRole = createClient(
-    process.env.NUXT_SUPABASE_URL || "",
-    process.env.NUXT_SUPABASE_SERVICE_ROLE_KEY || "",
-    // Make sure this is set in your .env
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    }
-  );
-  const { error } = await supabaseServiceRole.from("external_accounts").upsert({
-    user_id: session.user.id,
-    provider: "github",
-    provider_user_id: githubUser.id.toString(),
-    access_token: accessToken,
-    expires_at: tokenData.expires_in ? new Date(Date.now() + tokenData.expires_in * 1e3) : null
-  });
-  if (error) {
-    throw createError({
-      statusCode: 500,
-      message: "Failed to store GitHub connection"
-    });
-  }
-  return sendRedirect(event, "/settings/connections");
-});
-
-const callback$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: callback
-});
-
-const disconnect = defineEventHandler(async (event) => {
-  const { supabaseClient } = event.context;
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (!session) {
-    throw createError({
-      statusCode: 401,
-      message: "Unauthorized"
-    });
-  }
-  const { error } = await supabaseClient.from("external_accounts").delete().eq("user_id", session.user.id).eq("provider", "github");
-  if (error) {
-    throw createError({
-      statusCode: 500,
-      message: "Failed to disconnect GitHub account"
-    });
-  }
-  return { success: true };
-});
-
-const disconnect$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: disconnect
 });
 
 const VueResolver = (_, value) => {

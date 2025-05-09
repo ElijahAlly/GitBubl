@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useSupabase } from '~/lib/supabase';
-import type { User } from '~/types/user';
 
 const supabase = useSupabase();
 const userStore = useUserStore();

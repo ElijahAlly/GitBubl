@@ -86,18 +86,24 @@ definePageMeta({
 
         <!-- OTP Verification View -->
         <div v-if="isVerifying" class="col-6 form-widget w-full">
-          <p class="dark:text-white">Enter the code sent to your email</p>
+          <button @click="toggleTab('signin')"
+            class="text-zinc-500 dark:text-zinc-400 hover:text-red-500 dark:hover:text-red-400 text-sm transition-colors mb-4">
+            {{'<-'}} Cancel
+          </button>
+          <p class="dark:text-white">Enter the code sent to your email:</p>
+          <p class="dark:text-zinc-200 my-2 italic">{{ email }}</p>
           <div class="my-4">
             <input v-model="otpCode" class="border rounded p-3 w-full" required placeholder="Enter verification code"
               type="text" pattern="[0-9]*" inputmode="numeric" />
           </div>
           <div class="w-full flex justify-between px-1">
+            <p @click="() => resendOtp(email)"
+              class="text-zinc-500 dark:text-zinc-400 underline hover:text-zinc-800 dark:hover:text-zinc-200 cursor-pointer p-1 border border-zinc-500 hover:border-zinc-800 dark:border-zinc-400 dark:hover:border-zinc-200 rounded-md transition-colors">
+              {{ resendOtpLoading ? 'sending new code...' : 'resend code' }}
+            </p>
             <input type="submit"
               :class="[baseSubmitStyles, { [disabledSubmitStyles]: loading, [activeSubmitStyles]: !loading }]"
               role="button" :value="loading ? 'Verifying...' : 'Verify Code'" :disabled="loading" />
-            <p @click="() => resendOtp(email)" class="text-zinc-500 underline hover:text-zinc-800 cursor-pointer p-1 border border-zinc-500 hover:border-zinc-800 rounded-md">
-              {{ resendOtpLoading ? 'sending new code...' : 'resend code' }}
-            </p>
           </div>
         </div>
 

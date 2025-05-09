@@ -29,8 +29,6 @@ export { withCtx, withDirectives, withKeys, withMemo, withModifiers, withScopeId
 export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callback';
 export { setInterval } from '#app/compat/interval';
 export { useAuth } from '../src/composables/useAuth';
-export { useGithubConnect } from '../src/composables/useGithubConnect';
-export { useGithubData } from '../src/composables/useGithubData';
 export { useTheme } from '../src/composables/useTheme';
 export { useSupabaseClient } from '../node_modules/.pnpm/@nuxtjs+supabase@1.5.0/node_modules/@nuxtjs/supabase/dist/runtime/composables/useSupabaseClient';
 export { useSupabaseCookieRedirect } from '../node_modules/.pnpm/@nuxtjs+supabase@1.5.0/node_modules/@nuxtjs/supabase/dist/runtime/composables/useSupabaseCookieRedirect';

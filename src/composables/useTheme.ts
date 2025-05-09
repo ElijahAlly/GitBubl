@@ -3,10 +3,10 @@ export function useTheme() {
 
   onMounted(() => {
     // Only access localStorage on client-side
-    isDarkMode.value = localStorage.getItem('darkMode') === 'true';
-
-    // Initialize dark mode on page load
-    if (isDarkMode.value) {
+    const curVal = localStorage.getItem('darkMode');
+    isDarkMode.value = curVal === 'true';
+    if (!curVal && curVal !== 'false') {
+      localStorage.setItem('darkMode', 'true');
       document.documentElement.classList.add('dark');
     }
   })

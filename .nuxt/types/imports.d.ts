@@ -105,8 +105,6 @@ declare global {
   const useCssVars: typeof import('../../node_modules/.pnpm/vue@3.5.13_typescript@5.8.3/node_modules/vue')['useCssVars']
   const useError: typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/error')['useError']
   const useFetch: typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/fetch')['useFetch']
-  const useGithubConnect: typeof import('../../src/composables/useGithubConnect')['useGithubConnect']
-  const useGithubData: typeof import('../../src/composables/useGithubData')['useGithubData']
   const useHead: typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/head')['useHead']
   const useHeadSafe: typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/head')['useHeadSafe']
   const useHydration: typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/hydrate')['useHydration']
@@ -298,8 +296,6 @@ declare module 'vue' {
     readonly useCssVars: UnwrapRef<typeof import('../../node_modules/.pnpm/vue@3.5.13_typescript@5.8.3/node_modules/vue')['useCssVars']>
     readonly useError: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/error')['useError']>
     readonly useFetch: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/fetch')['useFetch']>
-    readonly useGithubConnect: UnwrapRef<typeof import('../../src/composables/useGithubConnect')['useGithubConnect']>
-    readonly useGithubData: UnwrapRef<typeof import('../../src/composables/useGithubData')['useGithubData']>
     readonly useHead: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/head')['useHead']>
     readonly useHeadSafe: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/head')['useHeadSafe']>
     readonly useHydration: UnwrapRef<typeof import('../../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/composables/hydrate')['useHydration']>
