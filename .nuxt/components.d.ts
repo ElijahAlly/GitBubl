@@ -14,6 +14,7 @@ type LazyComponent<T> = (T & DefineComponent<HydrationStrategies, {}, {}, {}, {}
 interface _GlobalComponents {
       'UserAccount': typeof import("../src/components/user/Account.vue")['default']
     'UserConnectExternalAccount': typeof import("../src/components/user/ConnectExternalAccount.vue")['default']
+    'User': typeof import("../src/components/user/index.vue")['default']
     'NuxtWelcome': typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/welcome.vue")['default']
     'NuxtLayout': typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-layout")['default']
     'NuxtErrorBoundary': typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-error-boundary")['default']
@@ -39,6 +40,7 @@ interface _GlobalComponents {
     'NuxtRouteAnnouncer': IslandComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/server-placeholder")['default']>
       'LazyUserAccount': LazyComponent<typeof import("../src/components/user/Account.vue")['default']>
     'LazyUserConnectExternalAccount': LazyComponent<typeof import("../src/components/user/ConnectExternalAccount.vue")['default']>
+    'LazyUser': LazyComponent<typeof import("../src/components/user/index.vue")['default']>
     'LazyNuxtWelcome': LazyComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/welcome.vue")['default']>
     'LazyNuxtLayout': LazyComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-layout")['default']>
     'LazyNuxtErrorBoundary': LazyComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-error-boundary")['default']>
@@ -70,6 +72,7 @@ declare module 'vue' {
 
 export const UserAccount: typeof import("../src/components/user/Account.vue")['default']
 export const UserConnectExternalAccount: typeof import("../src/components/user/ConnectExternalAccount.vue")['default']
+export const User: typeof import("../src/components/user/index.vue")['default']
 export const NuxtWelcome: typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/welcome.vue")['default']
 export const NuxtLayout: typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-layout")['default']
 export const NuxtErrorBoundary: typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-error-boundary")['default']
@@ -95,6 +98,7 @@ export const NuxtIsland: typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parce
 export const NuxtRouteAnnouncer: IslandComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/server-placeholder")['default']>
 export const LazyUserAccount: LazyComponent<typeof import("../src/components/user/Account.vue")['default']>
 export const LazyUserConnectExternalAccount: LazyComponent<typeof import("../src/components/user/ConnectExternalAccount.vue")['default']>
+export const LazyUser: LazyComponent<typeof import("../src/components/user/index.vue")['default']>
 export const LazyNuxtWelcome: LazyComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/welcome.vue")['default']>
 export const LazyNuxtLayout: LazyComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-layout")['default']>
 export const LazyNuxtErrorBoundary: LazyComponent<typeof import("../node_modules/.pnpm/nuxt@3.16.2_@parcel+watcher@2.5.1_@types+node@22.14.1_db0@0.3.1_eslint@9.24.0_jiti@2.4._d6b950c6eb60c7be0e7b4d5fede9fd3c/node_modules/nuxt/dist/app/components/nuxt-error-boundary")['default']>

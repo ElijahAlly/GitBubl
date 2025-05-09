@@ -9,7 +9,13 @@ const { user, updatedSuccessfully } = storeToRefs(userStore);
 
 const loading = ref(false);
 
-const updatedUser = ref<Partial<User>>({ ...user.value });
+const updatedUser = computed(() => ({
+  ...user.value,
+  // Only include fields that should be editable
+  username: user.value?.username || '',
+  website: user.value?.website || '',
+  avatar_url: user.value?.avatar_url || ''
+}));
 
 const updateProfile = async () => {
   if (loading.value || updatedSuccessfully.value) return;

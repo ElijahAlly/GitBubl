@@ -25,22 +25,25 @@ export function useAuth() {
   })
 
   const initializeAuth = async (retryCount = 0) => {
+    let authListener: any = null;
+
     try {
       const { data } = await supabase.auth.getSession();
 
       if (data.session) {
         session.value = data.session;
         await getProfile(data.session);
-        // goToProfile();
       }
 
+      // Cleanup previous listener before setting new one
+      if (authListener) authListener.unsubscribe();
+
       // Set up auth state change listener
-      supabase.auth.onAuthStateChange(async (_, _session) => {
+      authListener = supabase.auth.onAuthStateChange(async (_, _session) => {
         if (_session) {
           session.value = _session;
           try {
             await getProfile(_session);
-            // goToProfile();
           } catch (err) {
             console.error(err, 'Error getting profile');
           }
@@ -48,13 +51,12 @@ export function useAuth() {
       });
 
     } catch (error) {
-      console.error(`Auth initialization attempt ${retryCount + 1} failed:`, error);
-
+      console.log("\n== error in initializeAuth ==\n", error, "\n");
       if (retryCount < MAX_RETRIES) {
         await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-        await initializeAuth(retryCount + 1);
+        return initializeAuth(retryCount + 1);
       } else {
-        signOut();
+        await signOut();
       }
     }
   };
