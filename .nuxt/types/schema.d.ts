@@ -113,6 +113,12 @@ declare module 'nuxt/schema' {
       cdnURL: string,
    },
 
+   gitea: {
+      url: string,
+
+      token: string,
+   },
+
    nitro: {
       envPrefix: string,
    },
@@ -161,6 +167,8 @@ declare module 'nuxt/schema' {
 
       clientOptions: any,
    },
+
+   giteaUrl: string,
   }
 }
 declare module 'vue' {

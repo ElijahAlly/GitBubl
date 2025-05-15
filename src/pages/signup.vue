@@ -86,7 +86,7 @@ definePageMeta({
 
         <!-- OTP Verification View -->
         <div v-if="isVerifying" class="col-6 form-widget w-full">
-          <button @click="toggleTab('signin')"
+          <button @click.prevent.stop="toggleTab('signin')"
             class="text-zinc-500 dark:text-zinc-400 hover:text-red-500 dark:hover:text-red-400 text-sm transition-colors mb-4">
             {{'<-'}} Cancel
           </button>

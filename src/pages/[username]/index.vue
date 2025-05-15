@@ -39,7 +39,7 @@ const recentActivity: any[] = [];
       </div>
 
       <!-- Repository Grid -->
-      <div v-if="!pending" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div v-for="repo in repos" :key="repo.id"
           class="p-4 border dark:border-zinc-700 rounded-lg hover:border-emerald-500 transition-colors">
           <NuxtLink :to="`/${username}/${repo.name}`">
